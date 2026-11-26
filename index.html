@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Lunar Daily – Daily Horoscope</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23e8c872'/%3E%3Ccircle cx='21' cy='13' r='12' fill='%231b1633'/%3E%3C/svg%3E">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#14102a;color:#e9e6f5}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #2c2650;flex-wrap:wrap;gap:8px}
+.brand{font-size:20px;font-weight:700;color:#e8c872;letter-spacing:.5px}
+.date{font-size:13px;color:#a9a3c9}
+.lang button{background:none;border:1px solid #3a3366;color:#cfcaea;padding:4px 10px;cursor:pointer;font:inherit;font-size:13px}
+.lang button.on{background:#e8c872;color:#14102a;border-color:#e8c872}
+main{max-width:760px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:22px;margin:6px 0 4px}
+.sub{color:#a9a3c9;margin:0 0 16px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.sign{background:#1f1a3d;border:1px solid #2f2958;color:inherit;padding:12px 8px;text-align:center;cursor:pointer;font:inherit}
+.sign:hover,.sign:focus{border-color:#e8c872;outline:none}
+.sym{display:block;font-size:26px;color:#e8c872}
+.rng{display:block;font-size:12px;color:#a9a3c9}
+.card{background:#1f1a3d;border:1px solid #2f2958;padding:16px;margin-top:22px}
+.card h2{font-size:16px;margin:0 0 10px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+select,input{background:#14102a;color:inherit;border:1px solid #3a3366;padding:9px;font:inherit}
+input{width:96px}
+.btn{background:#e8c872;color:#14102a;border:0;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer}
+.btn.alt{background:none;color:#e8c872;border:1px solid #e8c872}
+.err{color:#f0a0a0;font-size:14px;margin-top:8px;min-height:20px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin-top:12px}
+.tabs button{background:#1f1a3d;border:1px solid #2f2958;color:#cfcaea;padding:8px 14px;cursor:pointer;font:inherit}
+.tabs button[aria-selected=true]{background:#e8c872;color:#14102a;border-color:#e8c872}
+.frame{background:#1f1a3d;border:1px solid #2f2958;padding:16px;min-height:170px;margin-top:-1px}
+.facts{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:14px;color:#cfcaea}
+.facts b{color:#e8c872}
+footer{text-align:center;color:#7d77a3;font-size:12px;padding:20px}
+</style>
+</head>
+<body>
+<header><div><div class="brand">Lunar Daily</div><div class="date" id="date"></div></div>
+<div class="lang"><button id="l-en" class="on">EN</button><button id="l-sr">SR</button></div></header>
+<main id="main"></main>
+<footer id="foot"></footer>
+<script>
+"use strict";
+var BLOB={salt:"k0v8rKbrnI7DgW/GQ0WJ0A==",iv:"HVEYfht+tCcC8mxx",ct:"EErUg+lSWS7ELV7COQIBKavyZq+v898dDC5o7ZVi/dnlV2XjgXFUkIoTT5H9roVdvGgD5sr4z4HijyL/y7XM01BolPNzeE3G7r1/+CmLo2wfeDBdm3jqBtPyA6KMLcIJ/H2shCh3qCYxkI5la6yZhEhb0lI1v8TgAGtVQKoJc3sVbBqXCTQPWIPdQNLikOWAJw18SYMcNhYl/xITZs7zJ2g+sg86djM/8pBbPHxEdq9hcRRWOeFvr4mp1REpsMGqB1CE3ln0X/oUpGTlvl0j6tClkzVqiUDng4d+VvvgHbgUiHVUwZIrn/8oaPny8UdnZ2C8RAvXKYHTs1TOBylUNbp/ip2NtWOG9pFw83WO3dS4W9ZflJ4u+eR4RLtU9H33IHy04kWDMnOwE02GEiAW/2RXb4iv9O8/SfPqBij5J2GvPk25h6YT7AOpHc8im4gcdQNS3UYEipKxIr8NUD6Wg9yeeIExGpNPKN+GE5mmBhVxV5Cvt3SQFU2MZQNQBXLP0xaWtKcVGf1iUn1F7LFRcTVM3fwtlbD7PtupL+C7V6P7dQZBiyenz5Bwnz1pl8NrIqvtMMFbHYEYVr/W4WA5eaufxAvZXczkGjIc1Qh86HlPtVFZo6HbjcYUYi0PHmgT82eKx1xochRQFKWikIbZ7MdCgUFZhCQ9RfkoyiJxyIfkEIu5w97Op3X2XcIsN0fJl0TzT/Zlr+gj6q53kC6rZoadgdo9wlSNQ8LhcggyyahywarK47NqCdtqlTZ6SZr1yN07AA0wFATDfBN+SmGpoGsoQG9pxNYqvB35TUu1ut9eEk28Kci8ve5JXgRswM9JmOGKJKBKCI9qpkxBXlsyPi3hEIJA/9N6qHJ9lEVmiXkIMATh1m3/w/bJSs99nound5pbbUaeAoTfJBo2/DcNkJeYxuS7GKIHXjkVWniWRWFA4HPkSaqp5px/lazplbXtpgCXoAWfOp2ZhFuWnLKIvEeNSRoxsRdK5BzmHehChPWh8Bsb8gsYZb6EKruSdzFbrHfXOuHYaeTU1gIGeLpHxiLjLBFFXQlIp0rMe/wJgdG3gdImwuojhXpi8oqZTCbgtGWEi1/uCwXXQeQ4NqvaXJp0Zp7zYPeQxxmhdudkoM/i45S7uDzcQ4mzQ3MIjhAao4TZZfOfyB+Go1rSKx+9kLzDoOmIlu5xb7JvTJ+/ep3ZrI7mnvaK9qlBmY8hlIn6ejZYZIE9tZfddefEUDSVq/AqvNzE0wYb/CUaSUGZ+MGX3wsYX7JnMWx3Rtr554AYnhnQ7PO/U6G2Ms7pgw1bNsavkAM3Phmh0Bt3sIqjRPWeqsl7S9r11uzQAO8JuPmiXLKgy1Q8W19WvwDL/1/LPgqlsnnzneBOtrg+ti86r/F4+bZGWiTekNE7dgQzV9Gq3rHCPYAxJ/BfDkdRv+l4oNvSTkU410cVrlLdagnCXSUuo4IhCjdMJFDFETqTxJx77CjpEDu7KCIF+SN+eb6+hGIulvBacnoWWzG8gjyJ0KC63YpcXubKfEexMSSCd+PRPYufuI/aJIgA59Xc7jd7YrSDycBvdzGNOTYIltPY8Qa2MoYe3vNzsuLOtsLih9B95hQbXyETAFk2nY5E2UjuWUX/TPLkGdjurCucJJabgckezG9yMtkyzUfYoHWuO8zU+xAYE5ZLS2lzwz6jwzYQ2eDqnKUT6p+ur1q8bEyH7ejREHK77q5hRs5TSI/uli6AgiT2c8ZIN3ohHFvqWnLo61GE5H1puy/SM6Gll4w6x99FHc5ywhMk62gIjTdKoaKEuYanAbzF/OTcSaYxWcnbZiXtmqj6PvAQwIooiDYdqVFPqXGNXVd9EH5uarC7bxcf/LpNo2NSEBiWNR5usyospzHbP24LYkRY8DHM8z2jKkoKdPy1aCgg/Q8L2z4cTjdIpRdFlxYhg1/bD3SKwbXm"};
+var SIGNS=[["Aries","Ovan","\u2648",321,419],["Taurus","Bik","\u2649",420,520],["Gemini","Blizanci","\u264A",521,620],["Cancer","Rak","\u264B",621,722],["Leo","Lav","\u264C",723,822],["Virgo","Devica","\u264D",823,922],["Libra","Vaga","\u264E",923,1022],["Scorpio","\u0160korpija","\u264F",1023,1121],["Sagittarius","Strelac","\u2650",1122,1221],["Capricorn","Jarac","\u2651",1222,119],["Aquarius","Vodolija","\u2652",120,218],["Pisces","Ribe","\u2653",219,320]];
+var MON={en:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],sr:["jan","feb","mar","apr","maj","jun","jul","avg","sep","okt","nov","dec"]};
+var DAYS={en:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],sr:["nedelja","ponedeljak","utorak","sreda","\u010detvrtak","petak","subota"]};
+var L={en:{tabs:["Clarity","Support","Path ahead","Now"],pick:"Choose your sign",pickSub:"Your daily horoscope, refreshed every day.",pers:"Personal horoscope",persHelp:"Enter your date of birth to find your sign.",d:"Day",m:"Month",y:"Year",show:"Show my horoscope",change:"Change sign",daily:"Daily horoscope",lucky:"Lucky number",col:"Lucky colour",mood:"Mood",moon:"Moon today",bad:"Please enter a valid date of birth.",foot:"\u00a9 Lunar Daily. For entertainment purposes only.",ph:["New moon","Waxing crescent","First quarter","Waxing gibbous","Full moon","Waning gibbous","Last quarter","Waning crescent"],cols:["Silver","Blue","Violet","Gold","Green","White","Rose","Amber"]},
+sr:{tabs:["Jasno\u0107a","Podr\u0161ka","Put napred","Sada"],pick:"Izaberi svoj znak",pickSub:"Tvoj dnevni horoskop, osve\u017een svakog dana.",pers:"Li\u010dni horoskop",persHelp:"Unesi datum ro\u0111enja da otkrije\u0161 svoj znak.",d:"Dan",m:"Mesec",y:"Godina",show:"Prika\u017ei moj horoskop",change:"Promeni znak",daily:"Dnevni horoskop",lucky:"Sre\u0107an broj",col:"Sre\u0107na boja",mood:"Raspolo\u017eenje",moon:"Mesec danas",bad:"Unesi ispravan datum ro\u0111enja.",foot:"\u00a9 Lunar Daily. Samo za zabavu.",ph:["Mlad mesec","Mladi srp","Prva \u010detvrt","Rastu\u0107i mesec","Pun mesec","Opadaju\u0107i mesec","Poslednja \u010detvrt","Stari srp"],cols:["Srebrna","Plava","Ljubi\u010dasta","Zlatna","Zelena","Bela","Roze","Ćilibar"]}};
+// TEST POOLS (placeholders, English only). Real pools: ~100 sentences per language, reviewed.
+var POOLS=[["Take a quiet moment before you decide anything.","Small details carry more meaning than usual today.","A clear thought arrives when you stop forcing it.","Trust the first calm idea of the morning.","Write down one thing that is on your mind."],
+["A friendly voice may reach you when you least expect it.","Someone close is thinking of you today.","Listening matters more than answering today.","A short conversation can lighten the whole day.","Accept a kind offer without explaining yourself.","An old friend may come to mind for a reason.","Ask for what you need in simple words."],
+["The coming days favour patient, steady steps.","Do not rush a plan that is still forming.","A door you had forgotten may open again soon.","Preparation now makes later choices easier.","Let the week unfold at its own pace."],
+["The moon is gentle today, so be gentle with yourself.","Today's energy is calm and slow.","A quiet evening will do you good.","Keep your pace steady and your plans simple.","Rest is productive today.","Small comforts matter more than big goals.","Notice one thing that feels good."]];
+var lang="en",sign=-1,tab=0,help=null,busy=false;
+var $=function(i){return document.getElementById(i)};
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function dayNum(){var n=new Date();return Math.floor(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate())/864e5)}
+function pick(pool,k,s){return pool[(((dayNum()*3+s*5+k*2)%pool.length)+pool.length)%pool.length]}
+function signOf(m,d){var v=m*100+d;for(var i=0;i<12;i++){var s=SIGNS[i];if(s[3]<=s[4]?(v>=s[3]&&v<=s[4]):(v>=s[3]||v<=s[4]))return i}return 0}
+function rng(i){var s=SIGNS[i],f=function(v){return Math.floor(v/100)-1};return (s[3]%100)+" "+MON[lang][f(s[3])]+" \u2013 "+(s[4]%100)+" "+MON[lang][f(s[4])]}
+function text(t){var a=pick(POOLS[t],0,sign),b=pick(POOLS[t],1,sign);return a+(a===b?"":" "+b)}
+function moonPhase(){var syn=29.530588853,d=(Date.now()-Date.UTC(2000,0,6,18,14))/864e5,p=((d%syn)+syn)%syn/syn;return {i:Math.floor(p*8+.5)%8,pct:Math.round((1-Math.cos(p*2*Math.PI))/2*100)}}
+function setDate(){var n=new Date();$("date").textContent=DAYS[lang][n.getDay()]+", "+n.getDate()+" "+MON[lang][n.getMonth()]+" "+n.getFullYear()}
+function pad(n){return (n<10?"0":"")+n}
+// Same work for every submission (key derivation + decrypt attempt) so timing does not reveal the result.
+async function tryUnlock(d,m,y){
+ var enc=new TextEncoder(),b64=function(s){return Uint8Array.from(atob(s),function(c){return c.charCodeAt(0)})};
+ var base=await crypto.subtle.importKey("raw",enc.encode(pad(d)+"-"+pad(m)+"-"+y),"PBKDF2",false,["deriveKey"]);
+ var key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64(BLOB.salt),iterations:200000,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["decrypt"]);
+ try{var pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:b64(BLOB.iv)},key,b64(BLOB.ct));return JSON.parse(new TextDecoder().decode(pt))}catch(e){return null}
+}
+function exitAll(){help=null;sign=-1;tab=0;render()}
+function render(){
+ var t=L[lang],M=$("main");M.textContent="";setDate();$("foot").textContent=t.foot;$("l-en").className=lang==="en"?"on":"";$("l-sr").className=lang==="sr"?"on":"";document.documentElement.lang=lang==="sr"?"sr":"en";
+ if(sign<0){
+  M.appendChild(el("h1","",t.pick));M.appendChild(el("p","sub",t.pickSub));
+  var g=el("div","grid");SIGNS.forEach(function(s,i){var b=el("button","sign");b.appendChild(el("span","sym",s[2]+"\uFE0E"));b.appendChild(el("span","",lang==="sr"?s[1]:s[0]));b.appendChild(el("span","rng",rng(i)));b.onclick=function(){sign=i;tab=0;render()};g.appendChild(b)});M.appendChild(g);
+  var c=el("div","card");c.appendChild(el("h2","",t.pers));c.appendChild(el("p","sub",t.persHelp));
+  var r=el("div","row"),dd=el("select"),mm=el("select"),yy=el("input");
+  for(var i=1;i<=31;i++){var o=el("option","",i);o.value=i;dd.appendChild(o)}
+  for(var j=0;j<12;j++){var p=el("option","",MON[lang][j]);p.value=j+1;mm.appendChild(p)}
+  yy.type="text";yy.inputMode="numeric";yy.maxLength=4;yy.placeholder=t.y;yy.autocomplete="off";
+  [dd,mm,yy].forEach(function(x){r.appendChild(x)});
+  var go=el("button","btn",t.show),er=el("div","err");r.appendChild(go);c.appendChild(r);c.appendChild(er);M.appendChild(c);
+  go.onclick=async function(){
+   if(busy)return;busy=true;er.textContent="";
+   var d=+dd.value,m=+mm.value,y=parseInt(yy.value,10),now=new Date().getFullYear(),dt=new Date(y,m-1,d);
+   var ok=y>=1900&&y<=now&&dt.getFullYear()===y&&dt.getMonth()===m-1&&dt.getDate()===d;
+   var h=await tryUnlock(ok?d:1,ok?m:1,ok?y:1900);busy=false;
+   if(!ok){er.textContent=t.bad;return}
+   help=h;sign=signOf(m,d);tab=0;render()};
+ }else{
+  var s=SIGNS[sign];M.appendChild(el("h1","",(lang==="sr"?s[1]:s[0])+" \u00b7 "+t.daily));M.appendChild(el("p","sub",rng(sign)));
+  var tb=el("div","tabs");tb.setAttribute("role","tablist");
+  t.tabs.forEach(function(n,i){var b=el("button","",n);b.setAttribute("role","tab");b.setAttribute("aria-selected",i===tab);b.onclick=function(){tab=i;render()};tb.appendChild(b)});M.appendChild(tb);
+  M.appendChild(el("div","frame",help?help[lang][tab]:text(tab)));
+  var n=dayNum(),mp=moonPhase(),f=el("div","facts");
+  [[t.lucky,((n*7+sign*13)%99)+1],[t.col,t.cols[(n+sign*3)%8]],[t.mood,"\u2605".repeat(((n+sign)%5)+1)+"\u2606".repeat(4-((n+sign)%5))],[t.moon,t.ph[mp.i]+" ("+mp.pct+"%)"]].forEach(function(x){var d=el("div");d.appendChild(el("b","",x[0]+": "));d.appendChild(document.createTextNode(x[1]));f.appendChild(d)});M.appendChild(f);
+  var ch=el("button","btn alt",t.change);ch.style.marginTop="18px";ch.onclick=exitAll;M.appendChild(ch);
+ }}
+$("l-en").onclick=function(){lang="en";render()};$("l-sr").onclick=function(){lang="sr";render()};
+document.addEventListener("keydown",function(e){if(e.key==="Escape")exitAll()});
+document.addEventListener("visibilitychange",function(){if(document.hidden&&help)exitAll()});
+window.addEventListener("pagehide",function(){help=null});
+window.addEventListener("pageshow",function(){exitAll()});
+render();
+</script>
+</body>
+</html>
